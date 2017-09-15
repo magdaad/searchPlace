@@ -13,6 +13,8 @@ function initMap() {
 
     document.getElementById('submit').addEventListener('click', function() {
         address = document.getElementById('address').value;
+        var xxx = document.getElementById("loader");
+        xxx.classList.add("loading");
         //geocodeAddress(geocoder);
 
         promiseTextSearch = new Promise(
@@ -31,8 +33,6 @@ function initMap() {
                         console.log("callback");
                         if (status == google.maps.places.PlacesServiceStatus.OK) {
                             resolve(results);
-                           // console.log("result");
-                            //showResults(results, "left");
                         }
                         else {
                             reject("failed");
@@ -48,28 +48,28 @@ function initMap() {
                 geocoder.geocode({'address': address}, function(results, status) {
                     if (status === 'OK') {
                         resolve(results);
-                        //showResults(results, "right");
                     } else {
                         reject(status);
-                        //alert('Geocode was not successful for the following reason: ' + status);
                     }
                 });
 
         });
-
+        
         var allPromises = Promise.all([promiseTextSearch, promiseGeocoder]).then(function(values){
             console.log(values);
+            var xxx = document.getElementById("loader");
+            xxx.classList.remove("loading");
+
             showResults(values[0], "right");
             showResults(values[1], "left");
         })
             .catch(function (err) {
                 console.log(err);
-            });
+        });
+
+        console.log(allPromises);
     });
 }
-
-
-
 
 /*function geocodeAddress(geocoder) {
     geocoder.geocode({'address': address}, function(results, status) {
@@ -85,7 +85,6 @@ function initMap() {
         }
     });
 }*/
-
 
 /*function initialize() {
     console.log("init");

@@ -23,3 +23,10 @@ html, body {
 #map{
     display: none;
 }
+
+.loading{
+    position:absolute;
+    height: 250px;
+    width:250px;
+    background-color: aqua;
+}
