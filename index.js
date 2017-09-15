@@ -18,12 +18,10 @@ function initMap() {
         promiseTextSearch = new Promise(
             function (resolve, reject) {
                 var pyrmont = new google.maps.LatLng(51.7592, 19.4560);
-
                 map = new google.maps.Map(document.getElementById('map'), {
                     center: pyrmont,
                     zoom: 15
                 });
-
                 var request = {
                     query: address
                 };
@@ -32,7 +30,8 @@ function initMap() {
                 service.textSearch(request, function callback(results, status) {
                         console.log("callback");
                         if (status == google.maps.places.PlacesServiceStatus.OK) {
-                            showResults(results, "left");
+                            resolve(results);
+                            //showResults(results, "left");
                         }
                     }
                 );
@@ -44,8 +43,8 @@ function initMap() {
             function (resolve, reject) {
                 geocoder.geocode({'address': address}, function(results, status) {
                     if (status === 'OK') {
-                        console.log(results);
-                        showResults(results, "right");
+                        resolve(results);
+                        //showResults(results, "right");
                     } else {
                         alert('Geocode was not successful for the following reason: ' + status);
                     }
@@ -53,10 +52,15 @@ function initMap() {
 
         });
 
+        var allPromises = Promise.all([promiseTextSearch, promiseGeocoder]).then(function(values){
+            console.log(values);
+            showResults(values[0], "right");
+            showResults(values[1], "left");
+        });
     });
 }
 
-var allPromises = Promise.all([promiseTextSearch, promiseGeocoder]);
+
 
 
 /*function geocodeAddress(geocoder) {
@@ -113,17 +117,18 @@ var allPromises = Promise.all([promiseTextSearch, promiseGeocoder]);
 function showResults(results, where) {
     for (var i = 0; i < results.length; i++) {
         var place = results[i];
+        var y;
         var x = document.createTextNode(place.formatted_address);
-        if (where == "left"){
-            var y = document.getElementById("placeListSearch");
+        if (where == "right"){
+            y = document.getElementById("placeListSearch");
         }
         else{
-            var y = document.getElementById("placeList");
+            y = document.getElementById("placeList");
         }
 
         var z = document.createElement("DIV");
         z.appendChild(x);
         y.appendChild(z);
-        console.log(place);
+        //console.log(place);
     }
 }
