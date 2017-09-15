@@ -31,7 +31,11 @@ function initMap() {
                         console.log("callback");
                         if (status == google.maps.places.PlacesServiceStatus.OK) {
                             resolve(results);
+                           // console.log("result");
                             //showResults(results, "left");
+                        }
+                        else {
+                            reject("failed");
                         }
                     }
                 );
@@ -46,7 +50,8 @@ function initMap() {
                         resolve(results);
                         //showResults(results, "right");
                     } else {
-                        alert('Geocode was not successful for the following reason: ' + status);
+                        reject(status);
+                        //alert('Geocode was not successful for the following reason: ' + status);
                     }
                 });
 
@@ -56,7 +61,10 @@ function initMap() {
             console.log(values);
             showResults(values[0], "right");
             showResults(values[1], "left");
-        });
+        })
+            .catch(function (err) {
+                console.log(err);
+            });
     });
 }
 
