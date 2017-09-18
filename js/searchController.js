@@ -11,7 +11,10 @@ var searchController = (function () {
             var xxx = document.getElementById("loader");
             xxx.classList.add("loading");
 
-            getDataService().getData(address);
+            getDataService().getData(address).then(function(values){
+                view.showResults(values[0], "left");
+                view.showResults(values[1], "right");
+            })
 
         });
     }
