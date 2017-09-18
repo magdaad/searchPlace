@@ -2,6 +2,8 @@
  * Created by Magda on 2017-09-15.
  */
 var id = 0;
+var dataGeocoder = [];
+var dataTextSearch = [];
 
 var Place = function(address){
     this.id = id;

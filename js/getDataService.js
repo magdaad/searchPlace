@@ -3,9 +3,10 @@
  */
 
 
-var getDataService = function (geocoder) {
+var getDataService = function () {
 
     var getData = function (address) {
+        var geocoder = new google.maps.Geocoder();
         var promiseTextSearch = new Promise(
             function (resolve, reject) {
                 var pyrmont = new google.maps.LatLng(51.7592, 19.4560);
@@ -17,7 +18,7 @@ var getDataService = function (geocoder) {
                     query: address
                 };
 
-                service = new google.maps.places.PlacesService(map);
+                var service = new google.maps.places.PlacesService(map);
                 service.textSearch(request, function callback(results, status) {
                         console.log("callback");
                         if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -28,7 +29,6 @@ var getDataService = function (geocoder) {
                         }
                     }
                 );
-
             }
         );
 
@@ -41,7 +41,6 @@ var getDataService = function (geocoder) {
                         reject(status);
                     }
                 });
-
                 console.log("hello")
             });
 
@@ -51,8 +50,17 @@ var getDataService = function (geocoder) {
                 var xxx = document.getElementById("loader");
                 xxx.classList.remove("loading");
 
-                view.showResults(values[0], "right");
-                view.showResults(values[1], "left");
+                for (var i=0; i<values[0].length; i++){
+                    var place = new Place(values[0][i].formatted_address);
+                    dataTextSearch.push(place);
+                }
+                for (i=0; i<values[1].length; i++){
+                    place = new Place(values[1][i].formatted_address);
+                    dataGeocoder.push(place);
+                }
+
+                view.showResults(dataTextSearch, "right");
+                view.showResults(dataGeocoder, "left");
             })
             .catch(function (err) {
                 console.log(err);

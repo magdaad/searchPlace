@@ -4,19 +4,18 @@
 
 var searchController = (function () {
 
-    function initMap() {
-        var geocoder = new google.maps.Geocoder();
+    function initSearch() {
 
         document.getElementById('submit').addEventListener('click', function() {
-            address = document.getElementById('address').value;
+            var address = document.getElementById('address').value;
             var xxx = document.getElementById("loader");
             xxx.classList.add("loading");
 
-            getDataService(geocoder).getData(address);
+            getDataService().getData(address);
 
         });
     }
 
-    return {initMap:initMap}
+    return {initSearch:initSearch}
 
 })();
