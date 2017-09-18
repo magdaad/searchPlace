@@ -51,16 +51,19 @@ var getDataService = function () {
                 xxx.classList.remove("loading");
 
                 for (var i=0; i<values[0].length; i++){
-                    var place = new Place(values[0][i].formatted_address);
-                    dataTextSearch.push(place);
-                }
-                for (i=0; i<values[1].length; i++){
-                    place = new Place(values[1][i].formatted_address);
-                    dataGeocoder.push(place);
+                    var place = new placeModel.Place(values[0][i].formatted_address);
+                    placeModel.addToDataTextSearch(place);
                 }
 
-                view.showResults(dataTextSearch, "right");
-                view.showResults(dataGeocoder, "left");
+                for (i=0; i<values[1].length; i++){
+                    place = new placeModel.Place(values[1][i].formatted_address);
+                    placeModel.addToGeocoder(place);
+                }
+
+                view.showResults(placeModel.getDataTextSearch(), "right");
+                view.showResults(placeModel.getDataGeocoder(), "left");
+
+
             })
             .catch(function (err) {
                 console.log(err);
